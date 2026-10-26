@@ -192,6 +192,8 @@ async def test_daily_optional_uv_and_wind_preserve_unknown_zero_and_other_fields
     client, _ = stub_api(monkeypatch, {"timeline/1day": [{"data": [row]}]})
     report = await client.get_weather(LAT, LON)
     assert report.daily_forecast == [expected]
+    assert report.daily_forecast[0].uv_index == (None if "uvi" in missing_fields else value)
+    assert report.daily_forecast[0].wind_bearing == (None if "wind_deg" in missing_fields else value)
 
 
 @pytest.mark.asyncio
